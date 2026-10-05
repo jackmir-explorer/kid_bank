@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>토끼 저금통</title>
+<meta name="theme-color" content="#CDEBFF">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#CDEBFF; --sky2:#E9F6FF; --meadow:#DDF2D0; --hill:#B9E3A4;
+  --paper:#FFFFFF; --ink:#2B3A67; --ink2:#5B6B94; --line:#D6E2F2;
+  --gold:#F5B82E; --gold2:#E09A12; --earn:#2F9E62; --earnbg:#DDF5E7;
+  --spend:#E4577A; --spendbg:#FFE3EA; --pink:#FFB8C8; --cat:#F4A04B;
+  --shadow:0 3px 0 rgba(43,58,103,.18);
+  --display:"Jua","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --body:"Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --sky:#1E2C4E; --sky2:#172340; --meadow:#1B2A24; --hill:#26402F;
+    --paper:#22304F; --ink:#EEF3FF; --ink2:#AAB8DA; --line:#34446A;
+    --earnbg:#1E3D2E; --spendbg:#46202D; --earn:#5BD08E; --spend:#FF7E9C;
+    --shadow:0 3px 0 rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --sky:#1E2C4E; --sky2:#172340; --meadow:#1B2A24; --hill:#26402F;
+  --paper:#22304F; --ink:#EEF3FF; --ink2:#AAB8DA; --line:#34446A;
+  --earnbg:#1E3D2E; --spendbg:#46202D; --earn:#5BD08E; --spend:#FF7E9C;
+  --shadow:0 3px 0 rgba(0,0,0,.35);
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--meadow);font-size:17px}
+html[data-size="lg"]{font-size:20px}
+body{margin:0;font-family:var(--body);color:var(--ink);background:var(--meadow);line-height:1.5;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--gold2);outline-offset:2px}
+.wrap{max-width:480px;margin:0 auto}
+
+/* ---------- hero: sky + jar ---------- */
+.hero{background:linear-gradient(var(--sky),var(--sky2));padding:18px 18px 0;position:relative;overflow:hidden}
+.title{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.title h1{font-family:var(--display);font-weight:400;font-size:1.6rem;margin:0;letter-spacing:-.01em}
+.iconbtn{border:0;background:var(--paper);border-radius:999px;width:44px;height:44px;font-size:1.3rem;box-shadow:var(--shadow)}
+.scene{display:grid;grid-template-columns:1fr 1.15fr;align-items:end;gap:4px;margin-top:6px}
+.bunny{width:100%;max-width:170px;justify-self:center}
+.jar{width:100%;max-width:210px;justify-self:center}
+.hop{animation:hop .6s ease}
+@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-22px)}70%{transform:translateY(0)}85%{transform:translateY(-6px)}}
+.wobble{animation:wob .5s ease}
+@keyframes wob{0%,100%{transform:rotate(0)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
+.jarfill{transform-box:view-box;transform-origin:100px 206px;transition:transform .8s cubic-bezier(.3,1.4,.5,1)}
+.balance{text-align:center;padding:6px 0 4px;position:relative;z-index:1}
+.balance .amt{font-family:var(--display);font-size:3.2rem;line-height:1.05;color:var(--ink)}
+.balance .cap{color:var(--ink2);font-size:.95rem}
+.coins{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 10px;padding:8px 0 14px;min-height:40px;position:relative;z-index:1}
+.coinchip{display:flex;align-items:center;gap:4px;font-family:var(--display);font-size:1rem;color:var(--ink2)}
+.hillsvg{display:block;width:100%;height:34px;margin-top:-6px}
+
+/* ---------- action buttons ---------- */
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:6px 18px 4px;background:var(--meadow)}
+.big{border:0;border-radius:22px;padding:14px 10px 12px;font-family:var(--display);font-size:1.25rem;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 5px 0 rgba(43,58,103,.25);transition:transform .08s}
+.big:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(43,58,103,.25)}
+.big .em{font-size:2rem;line-height:1}
+.big.in{background:var(--earn);color:#fff}
+.big.out{background:var(--spend);color:#fff}
+.big:disabled{opacity:.5}
+
+/* ---------- sections ---------- */
+section.block{padding:22px 18px 6px}
+h2{font-family:var(--display);font-weight:400;font-size:1.35rem;margin:0 0 10px}
+
+/* goal path */
+.goal{background:var(--paper);border-radius:28px 28px 28px 8px;padding:16px;box-shadow:var(--shadow)}
+.goalhead{display:flex;align-items:center;gap:12px}
+.goalicon{font-size:2.6rem;line-height:1}
+.goalname{font-family:var(--display);font-size:1.3rem}
+.goalprice{color:var(--ink2);font-size:.95rem}
+.pathsvg{display:block;width:100%;height:auto;margin:6px 0 2px}
+.goalmsg{font-family:var(--display);font-size:1.15rem;text-align:center;margin:2px 0 4px}
+.goalempty{text-align:center;padding:10px 0 4px}
+.soft{border:2px dashed var(--line);background:transparent;border-radius:16px;padding:12px 16px;font-family:var(--display);font-size:1.05rem;color:var(--ink2)}
+.done{display:block;margin:10px auto 0;border:0;background:var(--gold);color:#3a2a00;border-radius:16px;padding:12px 18px;font-family:var(--display);font-size:1.1rem;box-shadow:var(--shadow)}
+
+/* stats */
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.sum div{background:var(--paper);border-radius:16px;padding:10px 6px;text-align:center;box-shadow:var(--shadow)}
+.sum b{display:block;font-family:var(--display);font-weight:400;font-size:1.2rem}
+.sum small{color:var(--ink2);font-size:.82rem}
+.chartbox{background:var(--paper);border-radius:18px;padding:12px 10px 6px;box-shadow:var(--shadow)}
+.legend{display:flex;gap:14px;justify-content:flex-end;font-size:.82rem;color:var(--ink2);padding:0 6px 4px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.nw{display:flex;border-radius:14px;overflow:hidden;height:30px;margin:12px 0 4px;background:var(--line)}
+.nw span{display:flex;align-items:center;justify-content:center;font-size:.82rem;color:#fff;white-space:nowrap;overflow:hidden;transition:flex-grow .6s}
+.nwlab{display:flex;justify-content:space-between;font-size:.85rem;color:var(--ink2)}
+.cats{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+.cats li{display:grid;grid-template-columns:30px 1fr auto;align-items:center;gap:8px}
+.cats .bar{height:14px;border-radius:7px;background:var(--spend);opacity:.8}
+.cats .barwrap{background:var(--line);border-radius:7px}
+.muted{color:var(--ink2);font-size:.92rem}
+
+/* log notebook */
+.notebook{background:var(--paper);border-radius:18px;box-shadow:var(--shadow);padding:6px 0;background-image:repeating-linear-gradient(transparent 0 55px,var(--line) 55px 56px)}
+.day{font-family:var(--display);font-size:1rem;color:var(--ink2);padding:10px 16px 2px}
+.row{display:grid;grid-template-columns:42px 1fr auto 34px;align-items:center;gap:8px;padding:6px 8px 6px 14px;min-height:56px}
+.ric{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:1.35rem}
+.row.in .ric{background:var(--earnbg)} .row.out .ric{background:var(--spendbg)}
+.rlab{font-size:1rem;line-height:1.25}
+.tag{display:inline-block;font-size:.72rem;border-radius:8px;padding:0 6px;margin-left:4px;border:1px solid var(--line);color:var(--ink2);vertical-align:1px}
+.ramt{font-family:var(--display);font-size:1.15rem;white-space:nowrap}
+.row.in .ramt{color:var(--earn)} .row.out .ramt{color:var(--spend)}
+.del{border:0;background:transparent;color:var(--ink2);width:34px;height:34px;border-radius:50%;font-size:1.1rem}
+.confirmrow{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end;padding-bottom:4px}
+.confirmrow button{border:0;border-radius:10px;padding:6px 12px;font-size:.9rem}
+.confirmrow .yes{background:var(--spend);color:#fff}
+.confirmrow .no{background:var(--line)}
+.empty{text-align:center;padding:26px 16px;color:var(--ink2)}
+.more{display:block;margin:6px auto 0;border:0;background:transparent;color:var(--ink2);padding:10px;text-decoration:underline}
+.foot{padding:26px 18px 34px;text-align:center;color:var(--ink2);font-size:.82rem}
+
+/* ---------- bottom sheet ---------- */
+.overlay{position:fixed;inset:0;background:rgba(20,28,50,.45);display:none;align-items:flex-end;justify-content:center;z-index:10}
+.overlay.open{display:flex}
+.sheet{background:var(--paper);width:100%;max-width:480px;max-height:92%;overflow:auto;border-radius:26px 26px 0 0;padding:14px 18px calc(18px + env(safe-area-inset-bottom,0px));animation:up .25s ease}
+@keyframes up{from{transform:translateY(40px);opacity:.4}}
+.grab{width:44px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 10px}
+.sheet h3{font-family:var(--display);font-weight:400;font-size:1.4rem;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.step{margin-top:14px}
+.step>p{margin:0 0 8px;font-family:var(--display);font-size:1.05rem;color:var(--ink2)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tile{border:2px solid var(--line);background:var(--paper);border-radius:16px;padding:10px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:.92rem}
+.tile .e{font-size:1.8rem;line-height:1.1}
+.tile[aria-pressed="true"]{border-color:var(--ink);background:var(--sky2)}
+.moneytiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.money{border:2px solid var(--line);background:var(--paper);border-radius:16px;padding:8px 2px 6px;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:var(--display);font-size:.95rem}
+.money:active{transform:scale(.95)}
+.total{display:flex;align-items:center;justify-content:space-between;margin-top:10px;background:var(--sky2);border-radius:16px;padding:8px 8px 8px 16px}
+.total b{font-family:var(--display);font-weight:400;font-size:1.8rem}
+.reset{border:0;background:var(--paper);border-radius:12px;padding:8px 12px;font-size:.9rem}
+.nw2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.nwbtn{border:2px solid var(--line);background:var(--paper);border-radius:16px;padding:12px 6px;font-family:var(--display);font-size:1.05rem}
+.nwbtn small{display:block;font-family:var(--body);font-size:.78rem;color:var(--ink2)}
+.nwbtn[aria-pressed="true"]{border-color:var(--ink);background:var(--sky2)}
+.preview{margin-top:14px;border-radius:16px;padding:12px 14px;font-family:var(--display);font-size:1.1rem;text-align:center}
+.preview.ok{background:var(--earnbg)} .preview.warn{background:var(--spendbg)}
+.preview small{display:block;font-family:var(--body);font-size:.85rem;color:var(--ink2)}
+.field{display:flex;flex-direction:column;gap:4px;margin-top:10px}
+.field label{font-size:.9rem;color:var(--ink2)}
+.field input{border:2px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;font-size:1rem;background:var(--paper);color:var(--ink);width:100%}
+.go{width:100%;margin-top:16px;border:0;border-radius:18px;padding:14px;font-family:var(--display);font-size:1.3rem;color:#fff;box-shadow:0 4px 0 rgba(43,58,103,.25)}
+.go.in{background:var(--earn)} .go.out{background:var(--spend)} .go.set{background:var(--ink);color:var(--paper)}
+.go:disabled{opacity:.4;box-shadow:none}
+.cancel{width:100%;margin-top:8px;border:0;background:transparent;padding:10px;color:var(--ink2)}
+.danger{width:100%;margin-top:6px;border:0;background:transparent;padding:8px;color:var(--spend);font-size:.9rem}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,30px);opacity:0;background:var(--ink);color:var(--paper);padding:12px 18px;border-radius:16px;font-family:var(--display);font-size:1.05rem;transition:.3s;z-index:20;max-width:90%;text-align:center;pointer-events:none}
+.toast.show{transform:translate(-50%,0);opacity:1}
+
+.tbtns{display:flex;gap:8px}
+.status{font-size:.82rem;color:var(--ink2);min-height:1.2em;text-align:right;padding-top:2px}
+.lock{position:fixed;inset:0;z-index:30;background:linear-gradient(var(--sky),var(--meadow));display:none;align-items:center;justify-content:center;padding:24px}
+.lock.open{display:flex}
+.lockbox{background:var(--paper);border-radius:28px;padding:22px 20px;width:100%;max-width:360px;box-shadow:var(--shadow);text-align:center}
+.lockbox h3{font-family:var(--display);font-weight:400;font-size:1.5rem;margin:6px 0 4px}
+.lockbox .field{text-align:left}
+.whos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+.err{color:var(--spend);font-size:.9rem;min-height:1.3em;margin-top:8px}
+
+/* ---- easy-mode wizard ---- */
+.wzhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dots{display:flex;gap:6px}.dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}.dots i.on{background:var(--ink)}
+.q{font-family:var(--display);font-size:1.45rem;margin:16px 0 10px}
+.sub{margin:-4px 0 10px;color:var(--ink2)}
+.tiles2{grid-template-columns:1fr 1fr;gap:10px}
+.tiles2 .tile{min-height:92px;font-size:1.05rem;padding:12px 6px}
+.tile .e{font-size:2rem}
+.tile .hint{font-size:.85rem;color:var(--ink2)}
+.money{min-height:84px;font-size:1.05rem;padding:10px 4px}
+.money[aria-pressed="true"]{border-color:var(--ink);background:var(--sky2)}
+.money:disabled{opacity:.4}.money small{font-family:var(--body);font-size:.75rem;color:var(--spend)}
+.customrow{display:flex;align-items:center;gap:8px}
+.customrow input{flex:1;min-width:0;border:2px solid var(--line);border-radius:12px;padding:12px;font:inherit;font-size:1.1rem;background:var(--paper);color:var(--ink)}
+.go.small{width:auto;margin:0;padding:12px 18px;font-size:1.05rem}
+.nwbtn{min-height:84px;font-size:1.2rem}
+.summary{border-radius:22px;padding:18px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px}
+.summary.in{background:var(--earnbg)}.summary.out{background:var(--spendbg)}
+.sic{font-size:3rem;line-height:1}.slab{font-size:1.15rem}
+.samt{font-family:var(--display);font-size:2.4rem;line-height:1.1}
+.summary.in .samt{color:var(--earn)}.summary.out .samt{color:var(--spend)}
+.sbal{color:var(--ink2);margin-top:4px}.sbal b{color:var(--ink);font-family:var(--display);font-weight:400;font-size:1.2rem}
+.meta{margin-top:14px;display:grid;gap:6px;color:var(--ink2)}.meta b{color:var(--ink)}
+.meta input{border:2px solid var(--line);border-radius:12px;padding:10px;font:inherit;background:var(--paper);color:var(--ink)}
+.linkbtn{border:0;background:transparent;color:var(--ink2);text-decoration:underline;padding:6px 4px;font-size:.95rem}
+.wznav{margin-top:12px}
+.back{width:100%;border:2px solid var(--line);background:var(--paper);border-radius:16px;padding:12px;font-size:1.05rem}
+.sect{font-family:var(--display);font-size:1.15rem;margin:18px 0 0}
+.whogrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.whogrid .nwbtn{min-height:56px}
+.big2{min-height:64px!important;font-size:1.3rem!important}
+#whoIn{margin-top:8px}
+.toast{display:flex;align-items:center;gap:12px}
+.toast.show{pointer-events:auto}
+.toast button{border:0;background:var(--gold);color:#3a2a00;border-radius:10px;padding:8px 12px;font-family:var(--display);font-size:1rem;white-space:nowrap}
+.confirmrow span{margin-right:auto;align-self:center}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="title">
+      <h1 id="title">토끼 저금통</h1>
+      <div class="tbtns"><button class="iconbtn" id="syncBtn" aria-label="새로 불러오기">🔄</button><button class="iconbtn" id="settingsBtn" aria-label="이름과 목표 설정">⚙️</button></div>
+    </div>
+
+    <div class="status" id="status"></div>
+    <div class="scene">
+      <!-- original bunny -->
+      <svg class="bunny" id="bunny" viewBox="0 0 150 170" role="img" aria-label="동전을 든 토끼">
+        <g stroke="var(--ink)" stroke-width="3" stroke-linejoin="round">
+          <ellipse cx="52" cy="40" rx="15" ry="38" fill="#fff" transform="rotate(-12 52 40)"/>
+          <ellipse cx="52" cy="44" rx="7" ry="26" fill="#FFB8C8" stroke="none" transform="rotate(-12 52 44)"/>
+          <path d="M96 12 C118 6 126 30 112 56 C104 70 96 76 90 78 C86 60 84 20 96 12 Z" fill="#fff"/>
+          <path d="M98 24 C110 22 112 38 104 54 C100 62 96 66 94 66 C92 52 91 30 98 24 Z" fill="#FFB8C8" stroke="none"/>
+          <path d="M28 150 C22 118 36 98 75 98 C114 98 128 118 122 150 Z" fill="#fff"/>
+          <ellipse cx="75" cy="92" rx="46" ry="38" fill="#fff"/>
+        </g>
+        <ellipse cx="58" cy="90" rx="5.5" ry="7" fill="var(--ink)"/>
+        <ellipse cx="92" cy="90" rx="5.5" ry="7" fill="var(--ink)"/>
+        <circle cx="60" cy="87" r="2" fill="#fff"/><circle cx="94" cy="87" r="2" fill="#fff"/>
+        <ellipse cx="46" cy="104" rx="8" ry="5" fill="#FFB8C8" opacity=".85"/>
+        <ellipse cx="104" cy="104" rx="8" ry="5" fill="#FFB8C8" opacity=".85"/>
+        <path d="M71 100 L79 100 L75 105 Z" fill="#F28AA3"/>
+        <path d="M75 105 Q75 111 69 111 M75 105 Q75 111 81 111" fill="none" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/>
+        <!-- coin held -->
+        <g transform="translate(96 124)">
+          <circle r="17" fill="var(--gold)" stroke="var(--gold2)" stroke-width="3"/>
+          <text y="6" text-anchor="middle" font-family="Jua, sans-serif" font-size="16" fill="#7a5200">₩</text>
+        </g>
+        <ellipse cx="88" cy="134" rx="9" ry="7" fill="#fff" stroke="var(--ink)" stroke-width="3"/>
+      </svg>
+
+      <!-- jar -->
+      <svg class="jar" id="jar" viewBox="0 0 200 220" role="img" aria-label="저금통 병">
+        <defs>
+          <clipPath id="jarclip"><path d="M52 44 C30 60 24 90 24 130 C24 180 40 206 100 206 C160 206 176 180 176 130 C176 90 170 60 148 44 Z"/></clipPath>
+          <pattern id="coinpat" width="30" height="17" patternUnits="userSpaceOnUse">
+            <ellipse cx="15" cy="9" rx="13" ry="7" fill="var(--gold)" stroke="var(--gold2)" stroke-width="2"/>
+            <ellipse cx="0" cy="0" rx="13" ry="7" fill="#FFD45E" stroke="var(--gold2)" stroke-width="2"/>
+            <ellipse cx="30" cy="0" rx="13" ry="7" fill="#FFD45E" stroke="var(--gold2)" stroke-width="2"/>
+            <ellipse cx="0" cy="17" rx="13" ry="7" fill="#FFD45E" stroke="var(--gold2)" stroke-width="2"/>
+            <ellipse cx="30" cy="17" rx="13" ry="7" fill="#FFD45E" stroke="var(--gold2)" stroke-width="2"/>
+          </pattern>
+        </defs>
+        <path d="M52 44 C30 60 24 90 24 130 C24 180 40 206 100 206 C160 206 176 180 176 130 C176 90 170 60 148 44 Z" fill="rgba(255,255,255,.55)"/>
+        <g clip-path="url(#jarclip)">
+          <g class="jarfill" id="jarfill" style="transform:scaleY(0)">
+            <rect x="0" y="44" width="200" height="162" fill="url(#coinpat)"/>
+          </g>
+        </g>
+        <path d="M52 44 C30 60 24 90 24 130 C24 180 40 206 100 206 C160 206 176 180 176 130 C176 90 170 60 148 44 Z" fill="none" stroke="var(--ink)" stroke-width="4"/>
+        <path d="M44 88 C40 104 40 128 44 150" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity=".7"/>
+        <rect x="46" y="18" width="108" height="30" rx="10" fill="#FFB8C8" stroke="var(--ink)" stroke-width="4"/>
+        <rect x="84" y="28" width="32" height="8" rx="4" fill="var(--ink)"/>
+      </svg>
+    </div>
+
+    <div class="balance">
+      <div class="amt" id="bal">0원</div>
+      <div class="cap">지금 저금통에 있는 돈</div>
+    </div>
+    <div class="coins" id="coins" aria-label="동전과 지폐로 보기"></div>
+    <svg class="hillsvg" viewBox="0 0 400 34" preserveAspectRatio="none" aria-hidden="true"><path d="M0 34 L0 18 C80 -4 150 30 220 14 C290 -2 340 20 400 10 L400 34 Z" fill="var(--meadow)"/></svg>
+  </header>
+
+  <div class="actions">
+    <button class="big in" id="earnBtn" disabled><span class="em">🐰</span>돈을 받았어요</button>
+    <button class="big out" id="spendBtn" disabled><span class="em">🐱</span>돈을 썼어요</button>
+  </div>
+
+  <section class="block">
+    <h2>모으고 있는 것</h2>
+    <div class="goal" id="goal"></div>
+  </section>
+
+  <section class="block">
+    <h2>이번 달 우리 돈</h2>
+    <div class="sum" id="sum"></div>
+    <div class="chartbox">
+      <div class="legend"><span><i style="background:var(--earn)"></i>받은 돈</span><span><i style="background:var(--spend)"></i>쓴 돈</span></div>
+      <div id="chart"></div>
+    </div>
+    <div id="needwant"></div>
+    <ul class="cats" id="cats"></ul>
+  </section>
+
+  <section class="block">
+    <h2>용돈 일기</h2>
+    <div class="notebook" id="log"></div>
+  </section>
+
+  <p class="foot" id="foot">기록은 가족 구글 시트에 저장돼요. 30초마다 새로 불러와요.</p>
+</div>
+
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="sheet" role="dialog" aria-modal="true" id="sheet"></div>
+</div>
+<div class="lock" id="lock" role="dialog" aria-modal="true" aria-labelledby="lockTitle">
+  <div class="lockbox" id="lockbox"></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+/* ▼▼ 여기에 Apps Script 웹 앱 URL을 붙여 넣으세요 (README 2단계) ▼▼ */
+const API_URL='PASTE_YOUR_APPS_SCRIPT_URL_HERE';
+/* ▲▲ ------------------------------------------------------------ ▲▲ */
+
+/* 받는 이유: amt가 있으면 금액을 묻지 않고 바로 확인 화면으로 가요 */
+const EARN=[
+  {k:'allow',label:'주간 용돈',icon:'💰',amt:'weekly'},
+  {k:'spoon',label:'수저 놓기',icon:'🥄',amt:100},
+  {k:'shoes',label:'신발 정리',icon:'👟',amt:200},
+  {k:'laundry',label:'빨래 개기',icon:'👕',amt:300},
+  {k:'big',label:'큰일 돕기',icon:'🧹',amt:500},
+  {k:'gift',label:'선물·세뱃돈',icon:'🎁'},
+  {k:'etc',label:'기타',icon:'✏️'}
+];
+const SPEND=[
+  {k:'snack',label:'과자',icon:'🍪'},{k:'ice',label:'아이스크림',icon:'🍦'},
+  {k:'toy',label:'장난감',icon:'🚗'},{k:'sticker',label:'스티커',icon:'⭐'},
+  {k:'book',label:'책',icon:'📚'},{k:'etc',label:'기타',icon:'✏️'}
+];
+const AMT_IN=[500,1000,2000,3000,5000,10000];
+const AMT_OUT=[500,1000,1500,2000,3000,5000];
+const GOAL_ICONS=['🧸','🦖','🚂','🎨','🧩','🚲','🪁','🎁'];
+const WHO_OPTS=['아빠','엄마','할머니','할아버지'];
+const LS='pocket-money-v3', LS_WHO='pocket-who', LS_SIZE='pocket-size';
+
+const norm=s=>({childName:(s&&s.childName)||'',goal:(s&&s.goal)||null,weekly:Number(s&&s.weekly)||3000});
+let state={entries:[],settings:norm({})};
+let ready=false, showCount=40, pendingDelete=null, pending=0, syncing=false;
+let who='', size='';
+try{who=localStorage.getItem(LS_WHO)||'';size=localStorage.getItem(LS_SIZE)||'';}catch(e){}
+const noUrl=!/^https:\/\/script\.google\.com\//.test(API_URL);
+
+const $=id=>document.getElementById(id);
+const won=n=>(n||0).toLocaleString('ko-KR')+'원';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const balance=()=>state.entries.reduce((s,e)=>s+(e.type==='in'?e.amount:-e.amount),0);
+const presetAmt=o=>o.amt==='weekly'?state.settings.weekly:(o.amt||0);
+
+function applySize(){document.documentElement.dataset.size=size==='lg'?'lg':'';}
+applySize();
+function loadLocal(){try{const r=localStorage.getItem(LS);if(r){const d=JSON.parse(r);if(d&&Array.isArray(d.entries)){state.entries=d.entries;state.settings=norm(d.settings);}}}catch(e){}}
+function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(state));}catch(e){}}
+
+/* ---------- coin/bill mini icons ---------- */
+function moneyIcon(v,size){
+  size=size||30;
+  if(v>=1000){
+    const col=v>=10000?'#8BC89A':v>=5000?'#F2A36B':'#8DB8E8';
+    const lab=v>=10000?'만':v===5000?'5천':v===1000?'천':'';
+    if(!lab) return moneyIcon(1000,size);
+    return `<svg width="${size*1.5}" height="${size}" viewBox="0 0 45 30" aria-hidden="true"><rect x="1.5" y="4" width="42" height="22" rx="4" fill="${col}" stroke="#2B3A67" stroke-width="2"/><circle cx="31" cy="15" r="6" fill="rgba(255,255,255,.55)"/><text x="12" y="19.5" text-anchor="middle" font-family="Jua,sans-serif" font-size="9" fill="#2B3A67">${lab}</text></svg>`;
+  }
+  const r=v===500?13.5:11.5;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="${r}" fill="#D9DEE8" stroke="#8C95A8" stroke-width="2"/><text x="15" y="19" text-anchor="middle" font-family="Jua,sans-serif" font-size="${v===500?10:9.5}" fill="#4B556B">${v}</text></svg>`;
+}
+
+/* ---------- render ---------- */
+function render(){
+  const name=(state.settings.childName||'').trim();
+  $('title').textContent=name?`${name}의 저금통`:'토끼 저금통';
+  renderHero(); renderGoal(); renderStats(); renderLog();
+  $('earnBtn').disabled=!ready; $('spendBtn').disabled=!ready;
+}
+
+function renderHero(){
+  const b=balance();
+  $('bal').textContent=won(b);
+  const g=state.settings.goal;
+  const cap=g&&g.price>0?g.price:10000;
+  const lvl=b<=0?0:Math.max(.07,Math.min(1,b/cap));
+  $('jarfill').style.transform=`scaleY(${lvl})`;
+  let rest=Math.max(0,b), html='';
+  for(const v of [10000,5000,1000,500,100]){
+    const n=Math.floor(rest/v); rest-=n*v;
+    if(n>0) html+=`<span class="coinchip">${moneyIcon(v,28)}× ${n}</span>`;
+  }
+  $('coins').innerHTML=html||'<span class="muted">아직 저금통이 비어 있어요</span>';
+}
+
+function catSvg(x,y){
+  return `<g transform="translate(${x-22} ${y-44})">
+    <path d="M6 18 L10 0 L20 12 Z M38 18 L34 0 L24 12 Z" fill="var(--cat)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>
+    <ellipse cx="22" cy="24" rx="19" ry="16" fill="var(--cat)" stroke="var(--ink)" stroke-width="2.5"/>
+    <path d="M18 10 L18 16 M22 9 L22 16 M26 10 L26 16" stroke="#C06A1E" stroke-width="2.4" stroke-linecap="round"/>
+    <circle cx="15" cy="24" r="2.8" fill="var(--ink)"/><circle cx="29" cy="24" r="2.8" fill="var(--ink)"/>
+    <path d="M18 30 Q20 33 22 30 Q24 33 26 30" fill="none" stroke="var(--ink)" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M2 27 L9 28 M2 32 L9 30 M42 27 L35 28 M42 32 L35 30" stroke="var(--ink)" stroke-width="1.5" stroke-linecap="round"/>
+    <circle cx="11" cy="30" r="2.5" fill="#FFB8C8"/><circle cx="33" cy="30" r="2.5" fill="#FFB8C8"/>
+  </g>`;
+}
+
+function renderGoal(){
+  const g=state.settings.goal, el=$('goal');
+  if(!g||!g.price){
+    el.innerHTML=`<div class="goalempty"><svg width="120" height="70" viewBox="0 0 120 70" aria-hidden="true">${catSvg(60,62)}</svg>
+      <p class="muted">사고 싶은 게 생기면, 바로 사지 말고<br>목표로 정해서 함께 모아 봐요.</p>
+      <button class="soft" id="goalSet">목표 정하기</button></div>`;
+    $('goalSet').onclick=openSettings; return;
+  }
+  const b=Math.max(0,balance()), p=Math.min(1,b/g.price), left=g.price-b;
+  const stones=8, W=320, x0=28, x1=270;
+  const pts=[]; for(let i=0;i<stones;i++){const t=i/(stones-1);pts.push([x0+(x1-x0)*t, 70+Math.sin(t*Math.PI*2)*14]);}
+  const catT=p*(stones-1), ci=Math.min(stones-2,Math.floor(catT)), f=catT-ci;
+  const cx=pts[ci][0]+(pts[ci+1][0]-pts[ci][0])*f, cy=pts[ci][1]+(pts[ci+1][1]-pts[ci][1])*f;
+  let st='';
+  pts.forEach((q,i)=>{const on=i/(stones-1)<=p+1e-9;st+=`<ellipse cx="${q[0]}" cy="${q[1]+6}" rx="15" ry="7" fill="${on?'var(--gold)':'var(--line)'}" stroke="${on?'var(--gold2)':'none'}" stroke-width="2"/>`;});
+  el.innerHTML=`<div class="goalhead"><div class="goalicon">${esc(g.icon||'🎁')}</div>
+      <div><div class="goalname">${esc(g.name||'갖고 싶은 것')}</div><div class="goalprice">${won(g.price)}</div></div></div>
+    <svg class="pathsvg" viewBox="0 0 ${W} 110" role="img" aria-label="목표까지 ${Math.round(p*100)}퍼센트">
+      <path d="M${pts.map(q=>q.join(' ')).join(' L')}" fill="none" stroke="var(--line)" stroke-width="3" stroke-dasharray="4 7"/>
+      ${st}
+      <text x="${x1+26}" y="${pts[stones-1][1]+4}" font-size="34" text-anchor="middle">${esc(g.icon||'🎁')}</text>
+      ${catSvg(cx,cy+4)}
+    </svg>
+    <div class="goalmsg">${left>0?`${won(left)}만 더 모으면 살 수 있어요!`:'다 모았어요! 이제 살 수 있어요 🎉'}</div>
+    ${left<=0?`<button class="done" id="goalDone">${esc(g.name)} 샀어요!</button>`:''}`;
+  if(left<=0) $('goalDone').onclick=buyGoal;
+}
+
+function monday(d){const x=new Date(d);x.setHours(0,0,0,0);const w=(x.getDay()+6)%7;x.setDate(x.getDate()-w);return x;}
+
+function renderStats(){
+  const now=new Date(), mStart=new Date(now.getFullYear(),now.getMonth(),1).getTime();
+  const month=state.entries.filter(e=>e.t>=mStart);
+  const inM=month.filter(e=>e.type==='in').reduce((s,e)=>s+e.amount,0);
+  const outM=month.filter(e=>e.type==='out').reduce((s,e)=>s+e.amount,0);
+  const saved=inM-outM;
+  $('sum').innerHTML=`<div><small>받은 돈</small><b style="color:var(--earn)">${won(inM)}</b></div>
+    <div><small>쓴 돈</small><b style="color:var(--spend)">${won(outM)}</b></div>
+    <div><small>남긴 돈</small><b>${saved<0?'−':''}${won(Math.abs(saved))}</b></div>`;
+  const m0=monday(now), weeks=[];
+  for(let i=5;i>=0;i--){const s=new Date(m0);s.setDate(s.getDate()-7*i);const e=new Date(s);e.setDate(e.getDate()+7);weeks.push({s:s.getTime(),e:e.getTime(),label:`${s.getMonth()+1}/${s.getDate()}`,in:0,out:0});}
+  state.entries.forEach(en=>{const w=weeks.find(w=>en.t>=w.s&&en.t<w.e);if(w)w[en.type]+=en.amount;});
+  const max=Math.max(1000,...weeks.map(w=>Math.max(w.in,w.out)));
+  const W=340,H=150,base=122,top=14,gw=W/6;
+  let bars='';
+  weeks.forEach((w,i)=>{
+    const x=i*gw+gw/2, hi=(w.in/max)*(base-top), ho=(w.out/max)*(base-top);
+    bars+=`<rect x="${x-17}" y="${base-hi}" width="15" height="${hi}" rx="4" fill="var(--earn)"><title>${w.label} 주 받은 돈 ${won(w.in)}</title></rect>
+      <rect x="${x+2}" y="${base-ho}" width="15" height="${ho}" rx="4" fill="var(--spend)"><title>${w.label} 주 쓴 돈 ${won(w.out)}</title></rect>
+      <text x="${x}" y="${base+18}" text-anchor="middle" font-size="12" fill="var(--ink2)" font-family="Gowun Dodum,sans-serif">${i===5?'이번 주':w.label}</text>`;
+  });
+  $('chart').innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="최근 6주 받은 돈과 쓴 돈"><line x1="0" y1="${base}" x2="${W}" y2="${base}" stroke="var(--line)" stroke-width="2"/>${bars}</svg>`;
+  const need=month.filter(e=>e.type==='out'&&e.need==='need').reduce((s,e)=>s+e.amount,0);
+  const want=month.filter(e=>e.type==='out'&&e.need==='want').reduce((s,e)=>s+e.amount,0);
+  $('needwant').innerHTML=need+want>0?`<div class="nw"><span style="flex-grow:${need};background:var(--earn)">${need?'꼭 필요한 것':''}</span><span style="flex-grow:${want};background:var(--spend)">${want?'갖고 싶은 것':''}</span></div>
+      <div class="nwlab"><span>꼭 필요한 것 ${won(need)}</span><span>갖고 싶은 것 ${won(want)}</span></div>`:'';
+  const cats={};
+  month.filter(e=>e.type==='out').forEach(e=>{const k=e.icon+'|'+e.label;cats[k]=(cats[k]||0)+e.amount;});
+  const arr=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const cmax=arr.length?arr[0][1]:1;
+  $('cats').innerHTML=arr.map(([k,v])=>{const [ic,lb]=k.split('|');return `<li><span style="font-size:1.3rem">${esc(ic)}</span><div class="barwrap"><div class="bar" style="width:${Math.max(6,v/cmax*100)}%"></div></div><span class="muted">${esc(lb)} ${won(v)}</span></li>`;}).join('');
+}
+
+function dayLabel(t){const d=new Date(t);return `${d.getMonth()+1}월 ${d.getDate()}일 (${'일월화수목금토'[d.getDay()]})`;}
+
+function renderLog(){
+  const list=[...state.entries].sort((a,b)=>b.t-a.t);
+  if(!list.length){$('log').innerHTML=`<div class="empty">아직 기록이 없어요.<br>위의 초록 버튼으로 첫 용돈을 넣어 보세요.</div>`;return;}
+  let html='',last='';
+  list.slice(0,showCount).forEach(e=>{
+    const dl=dayLabel(e.t);
+    if(dl!==last){html+=`<div class="day">${dl}</div>`;last=dl;}
+    const tag=(e.type==='out'&&e.need?`<span class="tag">${e.need==='need'?'필요':'갖고 싶음'}</span>`:'')+(e.by?`<span class="tag">${esc(e.by)}</span>`:'');
+    html+=`<div class="row ${e.type}"><div class="ric">${esc(e.icon)}</div><div class="rlab">${esc(e.label)}${tag}</div>
+      <div class="ramt">${e.type==='in'?'+':'−'}${won(e.amount)}</div>
+      <button class="del" data-del="${esc(e.id)}" aria-label="${esc(e.label)} 기록 지우기">×</button>
+      ${pendingDelete===e.id?`<div class="confirmrow"><span class="muted">이 기록을 지울까요?</span><button class="no" data-no>그냥 둘게요</button><button class="yes" data-yes="${esc(e.id)}">지우기</button></div>`:''}</div>`;
+  });
+  if(list.length>showCount) html+=`<button class="more" id="more">지난 기록 더 보기</button>`;
+  $('log').innerHTML=html;
+  if($('more')) $('more').onclick=()=>{showCount+=40;renderLog();};
+}
+$('log').addEventListener('click',ev=>{
+  const d=ev.target.closest('[data-del]'), y=ev.target.closest('[data-yes]'), n=ev.target.closest('[data-no]');
+  if(y){pendingDelete=null;removeEntry(y.dataset.yes);return;}
+  if(n){pendingDelete=null;renderLog();return;}
+  if(d){pendingDelete=d.dataset.del;renderLog();}
+});
+
+/* ---------- server (Google Apps Script) ---------- */
+async function api(action,payload){
+  const res=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(Object.assign({action},payload||{}))});
+  if(!res.ok) throw new Error('network');
+  const j=await res.json();
+  if(!j.ok) throw new Error(j.error||'error');
+  return j;
+}
+const FAIL='인터넷 연결을 확인하고 다시 해 주세요.';
+function setStatus(t){$('status').textContent=t;}
+async function sync(){
+  if(noUrl||syncing) return; syncing=true;
+  try{
+    const j=await api('list');
+    if(pending===0){state.entries=j.entries;state.settings=norm(j.settings);saveLocal();render();}
+    setStatus('');
+  }catch(err){setStatus('연결이 안 돼요. 저장된 기록을 보여 드리고 있어요.');}
+  finally{syncing=false;}
+}
+function addEntry(e){
+  e.by=who||'';
+  state.entries.push(e); render(); pending++;
+  return api('add',{entry:e}).then(()=>{saveLocal();return true;})
+    .catch(()=>{state.entries=state.entries.filter(x=>x.id!==e.id);render();toast('저장하지 못했어요. '+FAIL);return false;})
+    .finally(()=>{pending--;});
+}
+async function removeEntry(id){
+  const old=state.entries.find(x=>x.id===id); if(!old) return;
+  state.entries=state.entries.filter(x=>x.id!==id); render(); pending++;
+  try{await api('delete',{id});saveLocal();}
+  catch(err){state.entries.push(old);render();toast('지우지 못했어요. '+FAIL);}
+  finally{pending--;}
+}
+async function saveSettings(s){
+  const prev=state.settings; state.settings=norm(s); render(); pending++;
+  try{await api('settings',{settings:state.settings});saveLocal();return true;}
+  catch(err){state.settings=prev;render();toast('저장하지 못했어요. '+FAIL);return false;}
+  finally{pending--;}
+}
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+
+/* ---------- sheet ---------- */
+function openSheet(html){ $('sheet').innerHTML='<div class="grab"></div>'+html; $('overlay').classList.add('open'); $('overlay').setAttribute('aria-hidden','false'); $('sheet').scrollTop=0; }
+function closeSheet(){ $('overlay').classList.remove('open'); $('overlay').setAttribute('aria-hidden','true'); wz=null; }
+$('overlay').addEventListener('click',e=>{if(e.target===$('overlay'))closeSheet();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet();});
+function todayStr(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+
+/* ---------- 기록 마법사: 한 화면에 질문 하나 ---------- */
+let wz=null;
+function openEntry(type){
+  wz={type,step:'reason',reason:null,amount:0,etc:'',need:null,date:todayStr(),showDate:false,skipped:false};
+  drawWz();
+}
+const stepsFor=()=>wz.type==='in'?['reason','amount','confirm']:['reason','amount','need','confirm'];
+function goStep(s){wz.step=s;drawWz();}
+function nextFrom(s){const st=stepsFor();goStep(st[st.indexOf(s)+1]);}
+function back(){
+  if(wz.step==='confirm'&&wz.skipped){goStep('reason');return;}
+  const st=stepsFor(), i=st.indexOf(wz.step);
+  if(i<=0){closeSheet();return;}
+  goStep(st[i-1]);
+}
+function reasonObj(){return (wz.type==='in'?EARN:SPEND).find(o=>o.k===wz.reason);}
+function reasonLabel(){const o=reasonObj();return wz.reason==='etc'?wz.etc.trim():o.label;}
+
+function drawWz(){
+  const isIn=wz.type==='in', st=stepsFor(), idx=st.indexOf(wz.step), b=balance();
+  const dots=st.map((s,i)=>`<i class="${i<=idx?'on':''}"></i>`).join('');
+  let body='', foot=`<div class="wznav"><button class="back" id="wzBack">${idx===0?'닫기':'← 이전'}</button></div>`;
+
+  if(wz.step==='reason'){
+    const opts=isIn?EARN:SPEND;
+    body=`<p class="q">${isIn?'왜 받았나요?':'무엇을 샀나요?'}</p>
+      <div class="tiles tiles2">${opts.map(o=>{const a=isIn?presetAmt(o):0;return `<button class="tile" data-r="${o.k}" aria-pressed="${wz.reason===o.k}"><span class="e">${o.icon}</span><span>${o.label}</span>${a?`<span class="hint">${won(a)}</span>`:''}</button>`;}).join('')}</div>
+      ${wz.reason==='etc'?`<div class="field"><label for="etc">무엇인지 적어 주세요</label><input id="etc" maxlength="20" value="${esc(wz.etc)}" enterkeyhint="next"></div>
+        <button class="go set" id="etcNext" ${wz.etc.trim()?'':'disabled'}>다음</button>`:''}`;
+  }
+
+  if(wz.step==='amount'){
+    const list=isIn?AMT_IN:AMT_OUT;
+    body=`<p class="q">얼마인가요?</p>
+      ${isIn?'':`<p class="sub">지금 저금통에 <b>${won(b)}</b> 있어요</p>`}
+      <div class="moneytiles">${list.map(v=>{const off=!isIn&&v>b;return `<button class="money" data-m="${v}" ${off?'disabled':''} aria-pressed="${wz.amount===v}">${moneyIcon(v,26)}<span>${won(v)}</span>${off?'<small>모자라요</small>':''}</button>`;}).join('')}</div>
+      <div class="field"><label for="custom">다른 금액</label>
+        <div class="customrow"><input id="custom" type="number" inputmode="numeric" min="100" step="100" placeholder="예: 700" value="${list.includes(wz.amount)||!wz.amount?'':wz.amount}" enterkeyhint="done"><span>원</span><button class="go set small" id="customGo">다음</button></div></div>`;
+  }
+
+  if(wz.step==='need'){
+    body=`<p class="q">이건 어떤 거예요?</p>
+      <div class="nw2">
+        <button class="nwbtn" data-n="need" aria-pressed="${wz.need==='need'}">꼭 필요해요<small>없으면 곤란한 것</small></button>
+        <button class="nwbtn" data-n="want" aria-pressed="${wz.need==='want'}">갖고 싶어요<small>없어도 괜찮은 것</small></button></div>`;
+  }
+
+  if(wz.step==='confirm'){
+    const o=reasonObj(), after=isIn?b+wz.amount:b-wz.amount, g=state.settings.goal, short=!isIn&&after<0;
+    const goalLine=g&&g.price?`<p class="sub">${esc(g.icon||'🎁')} ${esc(g.name)}까지 ${after>=g.price?'다 모았어요!':won(g.price-Math.max(0,after))+' 남아요'}</p>`:'';
+    body=`<p class="q">이대로 저장할까요?</p>
+      <div class="summary ${wz.type}">
+        <div class="sic">${o.icon}</div>
+        <div class="slab">${esc(reasonLabel())}${!isIn&&wz.need?`<span class="tag">${wz.need==='need'?'필요':'갖고 싶음'}</span>`:''}</div>
+        <div class="samt">${isIn?'+':'−'}${won(wz.amount)}</div>
+        <button class="linkbtn" id="chgAmt">금액 바꾸기</button>
+        <div class="sbal">저금통 ${won(b)} → <b>${won(after)}</b></div>
+      </div>
+      ${short?`<div class="preview warn">${won(-after)} 모자라요<small>저금통에 있는 만큼만 쓸 수 있어요</small></div>`:goalLine}
+      <div class="meta">
+        <div>날짜: <b>${wz.date===todayStr()?'오늘':esc(wz.date)}</b> <button class="linkbtn" id="chgDate">바꾸기</button></div>
+        ${wz.showDate?`<input type="date" id="dt" value="${wz.date}" max="${todayStr()}">`:''}
+        <div>기록하는 사람: <b>${esc(who||'—')}</b></div>
+      </div>
+      <button class="go ${wz.type}" id="save" ${short?'disabled':''}>${isIn?'저금통에 넣기':'돈 쓰기'}</button>`;
+  }
+
+  openSheet(`<div class="wzhead"><h3>${isIn?'🐰 돈을 받았어요':'🐱 돈을 썼어요'}</h3><div class="dots" aria-label="${idx+1}단계 / ${st.length}단계">${dots}</div></div>${body}${foot}`);
+  const sh=$('sheet');
+  $('wzBack').onclick=back;
+
+  sh.querySelectorAll('[data-r]').forEach(btn=>btn.onclick=()=>{
+    wz.reason=btn.dataset.r;
+    if(wz.reason==='etc'){drawWz();setTimeout(()=>$('etc')&&$('etc').focus(),50);return;}
+    const a=isIn?presetAmt(reasonObj()):0;
+    if(a){wz.amount=a;wz.skipped=true;goStep('confirm');}
+    else{wz.skipped=false;goStep('amount');}
+  });
+  if($('etc')){
+    $('etc').oninput=e=>{wz.etc=e.target.value;$('etcNext').disabled=!wz.etc.trim();};
+    const n=()=>{if(wz.etc.trim()){wz.skipped=false;goStep('amount');}};
+    $('etcNext').onclick=n; $('etc').onkeydown=e=>{if(e.key==='Enter')n();};
+  }
+  sh.querySelectorAll('[data-m]').forEach(btn=>btn.onclick=()=>{wz.amount=+btn.dataset.m;nextFrom('amount');});
+  if($('customGo')){
+    const n=()=>{const v=Math.round(Number($('custom').value)||0);if(v<=0){$('custom').focus();return;}
+      if(!isIn&&v>balance()){toast(`저금통에 ${won(balance())}밖에 없어요`);return;}
+      wz.amount=v;nextFrom('amount');};
+    $('customGo').onclick=n; $('custom').onkeydown=e=>{if(e.key==='Enter')n();};
+  }
+  sh.querySelectorAll('[data-n]').forEach(btn=>btn.onclick=()=>{wz.need=btn.dataset.n;goStep('confirm');});
+  if($('chgAmt')) $('chgAmt').onclick=()=>{wz.skipped=false;goStep('amount');};
+  if($('chgDate')) $('chgDate').onclick=()=>{wz.showDate=!wz.showDate;drawWz();};
+  if($('dt')) $('dt').onchange=e=>{wz.date=e.target.value||todayStr();};
+  if($('save')) $('save').onclick=()=>{
+    const o=reasonObj();
+    let t=Date.now();
+    if(wz.date!==todayStr()){const [y,m,d]=wz.date.split('-').map(Number);t=new Date(y,m-1,d,12).getTime();}
+    const e={id:uid(),type:wz.type,amount:wz.amount,label:reasonLabel(),icon:o.icon,need:isIn?null:wz.need,t};
+    closeSheet();
+    const p=addEntry(e);
+    const undo={label:'되돌리기',fn:async()=>{if(await p) removeEntry(e.id);}};
+    if(isIn){bounce('bunny','hop');toast(`저금통에 ${won(e.amount)}이 들어갔어요!`,undo);}
+    else{bounce('jar','wobble');toast(`${won(e.amount)}을 썼어요. ${won(balance())} 남았어요.`,undo);}
+  };
+}
+
+/* ---------- 설정 ---------- */
+function openSettings(){
+  const cur=state.settings, g=cur.goal||{};
+  const st={name:cur.childName||'',weekly:cur.weekly||3000,gname:g.name||'',gicon:g.icon||GOAL_ICONS[0],gprice:g.price||'',who:who,size:size};
+  function draw(){
+    openSheet(`<div class="wzhead"><h3>⚙️ 설정</h3></div>
+      <p class="sect">아이와 목표 <span class="muted">(가족 모두에게 같이 바뀌어요)</span></p>
+      <div class="field"><label for="cn">아이 이름</label><input id="cn" maxlength="10" placeholder="예: 하늘" value="${esc(st.name)}"></div>
+      <div class="field"><label for="wk">주간 용돈 금액 (원)</label><input id="wk" type="number" inputmode="numeric" min="100" step="100" value="${st.weekly}"></div>
+      <div class="field"><label>모으고 싶은 것</label>
+        <div class="tiles" style="grid-template-columns:repeat(4,1fr)">${GOAL_ICONS.map(i=>`<button class="tile" data-gi="${i}" aria-pressed="${st.gicon===i}"><span class="e">${i}</span></button>`).join('')}</div></div>
+      <div class="field"><label for="gn">이름</label><input id="gn" maxlength="16" placeholder="예: 공룡 인형" value="${esc(st.gname)}"></div>
+      <div class="field"><label for="gp">가격 (원)</label><input id="gp" type="number" inputmode="numeric" min="100" step="100" placeholder="예: 8000" value="${st.gprice}"></div>
+      ${cur.goal?'<button class="danger" id="clearGoal">목표 지우기</button>':''}
+      <p class="sect">이 휴대폰</p>
+      <div class="field"><label>쓰는 사람</label>
+        <div class="whogrid">${WHO_OPTS.map(w=>`<button class="nwbtn" data-w="${w}" aria-pressed="${st.who===w}">${w}</button>`).join('')}</div>
+        <input id="whoIn" maxlength="8" placeholder="다른 이름 직접 쓰기" value="${WHO_OPTS.includes(st.who)?'':esc(st.who)}"></div>
+      <div class="field"><label>글자 크기</label>
+        <div class="whogrid"><button class="nwbtn" data-s="" aria-pressed="${st.size!=='lg'}">보통</button><button class="nwbtn" data-s="lg" aria-pressed="${st.size==='lg'}" style="font-size:1.25rem">크게</button></div></div>
+      <button class="go set" id="saveSet">저장하기</button>
+      <button class="cancel" id="cancel">닫기</button>`);
+    const read=()=>{st.name=$('cn').value;st.weekly=$('wk').value;st.gname=$('gn').value;st.gprice=$('gp').value;};
+    const sh=$('sheet');
+    sh.querySelectorAll('[data-gi]').forEach(b=>b.onclick=()=>{read();st.gicon=b.dataset.gi;draw();});
+    sh.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{read();st.who=b.dataset.w;draw();});
+    $('whoIn').oninput=e=>{st.who=e.target.value.trim();sh.querySelectorAll('[data-w]').forEach(x=>x.setAttribute('aria-pressed','false'));};
+    sh.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{read();st.size=b.dataset.s;size=st.size;applySize();try{localStorage.setItem(LS_SIZE,size);}catch(e){}draw();});
+    $('cancel').onclick=closeSheet;
+    $('saveSet').onclick=async()=>{
+      read();
+      who=st.who;try{localStorage.setItem(LS_WHO,who);}catch(e){}
+      const price=Math.round(Number(st.gprice)||0);
+      const goal=price>0?{name:st.gname.trim()||'갖고 싶은 것',icon:st.gicon,price}:null;
+      if(await saveSettings({childName:st.name.trim(),weekly:Math.round(Number(st.weekly)||3000),goal})){closeSheet();toast('저장했어요');}
+    };
+    if($('clearGoal')) $('clearGoal').onclick=async()=>{read();if(await saveSettings({childName:st.name.trim(),weekly:Math.round(Number(st.weekly)||3000),goal:null})){closeSheet();toast('목표를 지웠어요');}};
+  }
+  draw();
+}
+
+/* ---------- 처음 열었을 때: 누가 쓰는지만 물어요 ---------- */
+function askWho(){
+  $('lockbox').innerHTML=`<svg width="80" height="90" viewBox="0 0 150 170" aria-hidden="true">${$('bunny').innerHTML}</svg>
+    <h3 id="lockTitle">누가 쓰시나요?</h3>
+    <p class="muted">기록 옆에 이름이 붙어요.<br>나중에 ⚙️ 설정에서 바꿀 수 있어요.</p>
+    <div class="whogrid">${WHO_OPTS.map(w=>`<button class="nwbtn big2" data-w="${w}">${w}</button>`).join('')}</div>
+    <div class="customrow" style="margin-top:10px"><input id="whoFirst" maxlength="8" placeholder="다른 이름"><button class="go set small" id="whoOk">확인</button></div>`;
+  $('lock').classList.add('open');
+  const done=v=>{who=v;try{localStorage.setItem(LS_WHO,who);}catch(e){}$('lock').classList.remove('open');};
+  $('lockbox').querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>done(b.dataset.w));
+  $('whoOk').onclick=()=>{const v=$('whoFirst').value.trim();if(v)done(v);};
+}
+
+async function buyGoal(){
+  const g=state.settings.goal; if(!g||balance()<g.price) return;
+  const e={id:uid(),type:'out',amount:g.price,label:g.name,icon:g.icon||'🎁',need:'want',t:Date.now()};
+  if(!(await addEntry(e))) return;
+  await saveSettings(Object.assign({},state.settings,{goal:null}));
+  bounce('bunny','hop');
+  toast(`스스로 모아서 ${g.name}을(를) 샀어요! 🎉`);
+}
+
+function bounce(id,cls){const el=$(id);el.classList.remove(cls);void el.getBoundingClientRect();el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),700);}
+let tt;
+function toast(m,action){
+  const t=$('toast');
+  t.innerHTML=`<span>${esc(m)}</span>${action?`<button id="toastAct">${esc(action.label)}</button>`:''}`;
+  t.classList.add('show');
+  if(action) $('toastAct').onclick=()=>{t.classList.remove('show');action.fn();};
+  clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),action?6000:2800);
+}
+
+$('settingsBtn').onclick=openSettings;
+$('earnBtn').onclick=()=>openEntry('in');
+$('spendBtn').onclick=()=>openEntry('out');
+$('syncBtn').onclick=()=>{setStatus('불러오는 중…');sync();};
+
+/* ---------- boot ---------- */
+loadLocal();
+if(noUrl){ setStatus('설치가 덜 끝났어요: index.html에 API_URL을 넣어 주세요 (README 2단계)'); render(); }
+else{ ready=true; render(); sync(); if(!who) askWho(); }
+setInterval(()=>{if(document.visibilityState==='visible')sync();},30000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')sync();});
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}
+})();
+</script>
+</body>
+</html>

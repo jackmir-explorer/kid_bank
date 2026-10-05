@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<rect width="512" height="512" fill="#CDEBFF"/>
+<ellipse cx="256" cy="500" rx="330" ry="90" fill="#B9E3A4"/>
+<g transform="translate(256 280) scale(1) translate(-256 -280)" stroke="#2B3A67" stroke-width="12" stroke-linejoin="round">
+ <ellipse cx="190" cy="150" rx="48" ry="120" fill="#fff" transform="rotate(-12 190 150)"/>
+ <ellipse cx="190" cy="160" rx="22" ry="82" fill="#FFB8C8" stroke="none" transform="rotate(-12 190 160)"/>
+ <ellipse cx="322" cy="150" rx="48" ry="120" fill="#fff" transform="rotate(12 322 150)"/>
+ <ellipse cx="322" cy="160" rx="22" ry="82" fill="#FFB8C8" stroke="none" transform="rotate(12 322 160)"/>
+ <ellipse cx="256" cy="320" rx="150" ry="125" fill="#fff"/>
+</g>
+<g transform="translate(256 280) scale(1) translate(-256 -280)">
+ <ellipse cx="200" cy="306" rx="18" ry="23" fill="#2B3A67"/><ellipse cx="312" cy="306" rx="18" ry="23" fill="#2B3A67"/>
+ <circle cx="206" cy="297" r="6" fill="#fff"/><circle cx="318" cy="297" r="6" fill="#fff"/>
+ <ellipse cx="160" cy="352" rx="26" ry="15" fill="#FFB8C8"/><ellipse cx="352" cy="352" rx="26" ry="15" fill="#FFB8C8"/>
+ <path d="M242 340 L270 340 L256 356 Z" fill="#F28AA3"/>
+ <path d="M256 356 Q256 376 236 376 M256 356 Q256 376 276 376" fill="none" stroke="#2B3A67" stroke-width="8" stroke-linecap="round"/>
+ <circle cx="380" cy="410" r="58" fill="#F5B82E" stroke="#E09A12" stroke-width="12"/>
+ <text x="380" y="434" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="62" fill="#7a5200">₩</text>
+</g></svg>

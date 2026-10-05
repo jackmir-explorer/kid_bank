@@ -1,0 +1,17 @@
+{
+  "name": "토끼 저금통",
+  "short_name": "저금통",
+  "description": "아이 용돈을 기록하고 목표를 향해 모으는 가족 저금통",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#CDEBFF",
+  "theme_color": "#CDEBFF",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
