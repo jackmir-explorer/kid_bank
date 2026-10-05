@@ -1,5 +1,5 @@
 // 토끼 저금통 서비스 워커: 앱 화면만 저장해 두고, 기록은 항상 서버(구글 시트)에서 받아와요.
-const CACHE = 'pocket-shell-v2';
+const CACHE = 'pocket-shell-v3';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
